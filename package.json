@@ -1,38 +1,40 @@
 {
-	"name": "example-basic",
-	"type": "module",
-	"scripts": {
-		"dev": "vinxi dev",
-		"build": "vinxi build",
-		"start": "vinxi start",
-		"version": "vinxi version",
-		"preview": "pnpm run build && npx wrangler dev",
-		"deploy": "pnpm run build && wrangler deploy",
-		"cf-typegen": "wrangler types",
-		"lint": "eslint src/ --fix"
-	},
-	"dependencies": {
-		"@solidjs/meta": "^0.29.4",
-		"@solidjs/router": "^0.15.0",
-		"@solidjs/start": "^1.1.0",
-		"@tailwindcss/vite": "^4.1.17",
-		"daisyui": "^5.5.5",
-		"solid-js": "^1.9.5",
-		"tailwindcss": "^4.1.17",
-		"vinxi": "^0.5.7"
-	},
-	"engines": {
-		"node": ">=22"
-	},
-	"devDependencies": {
-		"@eslint/js": "^9.39.1",
-		"@types/node": "^24.10.1",
-		"@typescript-eslint/parser": "^8.48.0",
-		"eslint": "^9.39.1",
-		"eslint-plugin-solid": "^0.14.5",
-		"globals": "^16.5.0",
-		"nitropack": "^2.12.9",
-		"typescript-eslint": "^8.48.0",
-		"wrangler": "^4.51.0"
-	}
+  "name": "example-basic",
+  "type": "module",
+  "scripts": {
+    "dev": "vinxi dev",
+    "build": "vinxi build",
+    "start": "vinxi start",
+    "version": "vinxi version",
+    "preview": "pnpm run build && npx wrangler dev",
+    "deploy": "pnpm run build && wrangler deploy",
+    "cf-typegen": "wrangler types",
+    "lint": "eslint src/ --fix"
+  },
+  "dependencies": {
+    "@solidjs/meta": "^0.29.4",
+    "@solidjs/router": "^0.15.0",
+    "@solidjs/start": "^1.1.0",
+    "@tailwindcss/vite": "^4.1.17",
+    "daisyui": "^5.5.5",
+    "solid-js": "^1.9.5",
+    "tailwindcss": "^4.1.17",
+    "vinxi": "^0.5.7"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@types/node": "^24.10.1",
+    "@typescript-eslint/parser": "^8.48.0",
+    "eslint": "^9.39.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-solid": "^0.14.5",
+    "globals": "^16.5.0",
+    "nitropack": "^2.12.9",
+    "prettier": "3.7.2",
+    "typescript-eslint": "^8.48.0",
+    "wrangler": "^4.51.0"
+  }
 }

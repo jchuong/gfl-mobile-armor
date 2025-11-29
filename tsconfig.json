@@ -10,11 +10,7 @@
     "allowJs": true,
     "strict": true,
     "noEmit": true,
-    "types": [
-        "./worker-configuration.d.ts",
-        "node",
-        "vinxi/types/client"
-    ],
+    "types": ["./worker-configuration.d.ts", "node", "vinxi/types/client"],
     "isolatedModules": true,
     "paths": {
       "~/*": ["./src/*"]
