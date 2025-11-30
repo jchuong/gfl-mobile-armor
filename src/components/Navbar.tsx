@@ -1,12 +1,6 @@
 import { FiMenu, FiMoon, FiSun } from 'solid-icons/fi';
-import { onMount } from 'solid-js';
-import { themeChange } from 'theme-change';
 
 export function Navbar() {
-  onMount(async () => {
-    themeChange(false);
-  })
-
   return (
     <div class="navbar bg-base-100 shadow-sm">
       <div class="navbar-start">
@@ -35,7 +29,7 @@ export function Navbar() {
       </div>
       <div class="navbar-end">
         <label class="toggle text-base-content">
-          <input type="checkbox" value="sunset" class="theme-controller" data-toggle-theme="silk,sunset"/>
+          <input type="checkbox" value="sunset" class="theme-controller" />
           <FiSun />
           <FiMoon />
         </label>
