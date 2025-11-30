@@ -1,20 +1,21 @@
 import { createSignal, Show } from "solid-js";
+import { VehicleComponentWithUserInfo } from "~/types/VehicleComponent";
+import { convertRawToVehicleComponent } from "~/utils/vehicle-component";
 
 export default function UserFileReader() {
-    const [fileText, setFileText] = createSignal<unknown>(null);
+    const [vehicleComponents, setVehicleComponents] = createSignal<VehicleComponentWithUserInfo | null>(null);
 
     const readFile = async (file: File | null) => {
         if (!file) {
-            setFileText('');
+            setVehicleComponents(null);
             return;
         }
         const content = await file.text();
         try {
             const jsonContent = JSON.parse(content);
-            console.log('loaded');
-            setFileText(jsonContent['vehicle_component_with_user_info']);
+            setVehicleComponents(jsonContent['vehicle_component_with_user_info']);
         } catch {
-            setFileText(null);
+            setVehicleComponents(null);
         }
     }
 
@@ -24,10 +25,12 @@ export default function UserFileReader() {
             <input type="file" class="file-input" onChange={async (event) => { readFile(event.target.files ? event.target.files[0] : null) }} />
             <label class="label">user_info.json from GFAlarm</label>
         </fieldset>
-        <Show when={fileText()}>
+        <Show when={vehicleComponents()}>
             <pre class="rounded-lg p-4 text-left">
                 <code>
-                    {JSON.stringify(fileText(), null, 2)}
+                    {JSON.stringify(
+                        convertRawToVehicleComponent(
+                            vehicleComponents()!), null, 2)}
                 </code>
             </pre>
         </Show>

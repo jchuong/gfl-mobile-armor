@@ -1,0 +1,62 @@
+export type VehicleComponentWithUserInfo = Map<string, RawVehicleComponent>;
+
+export type RawVehicleComponent = {
+    "id": string;
+    "user_id": string;
+    "component_id": string;
+    "exp": string;
+    "level": string;
+    "skin": string;
+    "is_locked": string;
+    "roll_1": string;
+    "roll_2": string;
+    "roll_3": string;
+    "roll_4": string;
+    "roll_5": string;
+    "unlocked_att": string;
+    "heavy_damage": string;
+    "light_damage": string;
+    "reload": string;
+    "precision": string
+    "atk_speed": string;
+    "hit": string;
+    "armor": string;
+    "dodge": string;
+    "crit_rate": string;
+    "crit_damage": string;
+    "L_armor_piercing": string;
+    "def_break": string;
+    "H_armor_piercing": string;
+    "energy": string;
+    "energy_bak": string;
+    "skill": string;
+};
+
+export type VehicleComponent = {
+    "id": number;
+    "component_id": number;
+    "name": string;
+    "level": number;
+    "skin": string;
+    "is_locked": boolean;
+    "roll_1": string;
+    "roll_2": string;
+    "roll_3": string;
+    "roll_4": string;
+    "roll_5": string;
+    "unlocked_att": string;
+    "heavy_damage": number;
+    "light_damage": number;
+    "reload": number;
+    "precision": number
+    "atk_speed": number;
+    "hit": number;
+    "armor": number;
+    "dodge": number;
+    "crit_rate": number;
+    "crit_damage": number;
+    "L_armor_piercing": number;
+    "def_break": number;
+    "H_armor_piercing": number;
+    "skill": string;
+}
