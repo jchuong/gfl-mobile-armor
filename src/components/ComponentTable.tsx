@@ -3,8 +3,6 @@ import {
   createSolidTable,
   flexRender,
   getCoreRowModel,
-  RowModel,
-  Table,
 } from "@tanstack/solid-table";
 import { For } from "solid-js";
 import { VehicleComponent } from "~/types/VehicleComponent";
@@ -36,10 +34,12 @@ const COLUMNS: ColumnDef<VehicleComponent>[] = [
   },
 ];
 
-export default function ComponentTable({ data }: ComponentTableProps) {
+export default function ComponentTable(props: ComponentTableProps) {
   const table = createSolidTable({
     columns: COLUMNS,
-    data: data,
+    get data() {
+      return props.data;
+    },
     getCoreRowModel: getCoreRowModel(),
   });
   return (

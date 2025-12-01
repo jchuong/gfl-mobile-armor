@@ -1,23 +1,30 @@
-import { createSignal, Show } from "solid-js";
-import { VehicleComponentWithUserInfo } from "~/types/VehicleComponent";
+import { Show } from "solid-js";
+import {
+  VehicleComponent,
+} from "~/types/VehicleComponent";
 import { convertRawToVehicleComponent } from "~/utils/vehicle-component";
 import ComponentTable from "./ComponentTable";
+import { createStore } from "solid-js/store";
 
 export default function UserFileReader() {
-  const [vehicleComponents, setVehicleComponents] =
-    createSignal<VehicleComponentWithUserInfo | null>(null);
+  const [vehicleComponents, setVehicleComponents] = createStore<
+    VehicleComponent[]
+  >([]);
 
   const readFile = async (file: File | null) => {
     if (!file) {
-      setVehicleComponents(null);
+      setVehicleComponents([]);
       return;
     }
     const content = await file.text();
     try {
       const jsonContent = JSON.parse(content);
-      setVehicleComponents(jsonContent["vehicle_component_with_user_info"]);
+      const components = convertRawToVehicleComponent(
+        jsonContent["vehicle_component_with_user_info"],
+      );
+      setVehicleComponents(components);
     } catch {
-      setVehicleComponents(null);
+      setVehicleComponents([]);
     }
   };
 
@@ -34,18 +41,10 @@ export default function UserFileReader() {
         />
         <label class="label">user_info.json from GFAlarm</label>
       </fieldset>
-      <Show when={vehicleComponents()}>
-        <ComponentTable
-          data={convertRawToVehicleComponent(vehicleComponents()!)}
-        />
+      <Show when={vehicleComponents.length > 0}>
+        <ComponentTable data={vehicleComponents} />
         <pre class="rounded-lg p-4 text-left">
-          <code>
-            {JSON.stringify(
-              convertRawToVehicleComponent(vehicleComponents()!),
-              null,
-              2,
-            )}
-          </code>
+          <code>{JSON.stringify(vehicleComponents, null, 2)}</code>
         </pre>
       </Show>
     </div>
