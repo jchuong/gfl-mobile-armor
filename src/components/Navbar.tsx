@@ -1,4 +1,4 @@
-import { FiMenu, FiMoon, FiSun } from 'solid-icons/fi';
+import { FiMenu, FiMoon, FiSun } from "solid-icons/fi";
 
 export function Navbar() {
   return (
@@ -25,7 +25,9 @@ export function Navbar() {
         </div>
       </div>
       <div class="navbar-center">
-        <a class="btn btn-ghost text-xl">Girls Frontline Mobile Armor Organizer</a>
+        <a class="btn btn-ghost text-xl">
+          Girls Frontline Mobile Armor Organizer
+        </a>
       </div>
       <div class="navbar-end">
         <label class="toggle text-base-content">
