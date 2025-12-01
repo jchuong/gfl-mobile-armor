@@ -1,7 +1,5 @@
 import { Show } from "solid-js";
-import {
-  VehicleComponent,
-} from "~/types/VehicleComponent";
+import { VehicleComponent } from "~/types/VehicleComponent";
 import { convertRawToVehicleComponent } from "~/utils/vehicle-component";
 import ComponentTable from "./ComponentTable";
 import { createStore } from "solid-js/store";
@@ -43,9 +41,6 @@ export default function UserFileReader() {
       </fieldset>
       <Show when={vehicleComponents.length > 0}>
         <ComponentTable data={vehicleComponents} />
-        <pre class="rounded-lg p-4 text-left">
-          <code>{JSON.stringify(vehicleComponents, null, 2)}</code>
-        </pre>
       </Show>
     </div>
   );

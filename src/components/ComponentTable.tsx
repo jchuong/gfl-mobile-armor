@@ -3,8 +3,10 @@ import {
   createSolidTable,
   flexRender,
   getCoreRowModel,
+  getSortedRowModel,
+  SortingState,
 } from "@tanstack/solid-table";
-import { For } from "solid-js";
+import { createSignal, For } from "solid-js";
 import { VehicleComponent } from "~/types/VehicleComponent";
 
 interface ComponentTableProps {
@@ -15,10 +17,12 @@ const COLUMNS: ColumnDef<VehicleComponent>[] = [
   {
     accessorKey: "name",
     header: () => "Name",
+    sortingFn: "text",
   },
   {
     accessorKey: "level",
     header: () => "Level",
+    sortingFn: "basic",
   },
   {
     accessorKey: "roll_1",
@@ -35,12 +39,22 @@ const COLUMNS: ColumnDef<VehicleComponent>[] = [
 ];
 
 export default function ComponentTable(props: ComponentTableProps) {
+  const [sorting, setSorting] = createSignal<SortingState>([
+    { id: "name", desc: false },
+  ]);
   const table = createSolidTable({
     columns: COLUMNS,
     get data() {
       return props.data;
     },
     getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    onSortingChange: setSorting,
+    state: {
+      get sorting() {
+        return sorting();
+      },
+    },
   });
   return (
     <div class="m-2 rounded-box border border-base-content/5 bg-base-100">
@@ -51,13 +65,22 @@ export default function ComponentTable(props: ComponentTableProps) {
               <tr>
                 <For each={headerGroup.headers}>
                   {(header) => (
-                    <th>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
+                    <th class="bg-base-200">
+                      {header.isPlaceholder ? null : (
+                        <div
+                          class={
+                            header.column.getCanSort()
+                              ? "cursor-pointer select-none"
+                              : undefined
+                          }
+                          onClick={header.column.getToggleSortingHandler()}
+                        >
+                          {flexRender(
                             header.column.columnDef.header,
                             header.getContext(),
                           )}
+                        </div>
+                      )}
                     </th>
                   )}
                 </For>
