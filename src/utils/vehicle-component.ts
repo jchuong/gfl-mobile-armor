@@ -1,12 +1,23 @@
-import { VehicleComponent, VehicleComponentWithUserInfo } from "~/types/VehicleComponent";
+import { RawVehicleComponent, VehicleComponent, VehicleComponentWithUserInfo } from "~/types/VehicleComponent";
+import t from '~/data/en.json';
+
+interface Translation {
+    [key: string]: string;
+}
+const translation = t as Translation;
+
+
+export function getNameOfComponent(componentId: number | string) {
+    const key = `vehicle_component-1000${componentId}`;
+    return translation[key] ?? key;
+}
 
 export function convertRawToVehicleComponent(input: VehicleComponentWithUserInfo) {
-    console.log(input);
-    return Object.values(input).map((component): VehicleComponent => {
+    return Object.values(input).map((component: RawVehicleComponent): VehicleComponent => {
         return {
             id: Number(component.id),
             component_id: Number(component.component_id),
-            name: component.component_id,
+            name: getNameOfComponent(component.component_id),
             level: Number(component.level),
             skin: component.skin,
             is_locked: component.is_locked === "1",
