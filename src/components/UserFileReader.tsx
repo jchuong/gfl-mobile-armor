@@ -1,6 +1,7 @@
 import { createSignal, Show } from "solid-js";
 import { VehicleComponentWithUserInfo } from "~/types/VehicleComponent";
 import { convertRawToVehicleComponent } from "~/utils/vehicle-component";
+import ComponentTable from "./ComponentTable";
 
 export default function UserFileReader() {
     const [vehicleComponents, setVehicleComponents] = createSignal<VehicleComponentWithUserInfo | null>(null);
@@ -26,6 +27,7 @@ export default function UserFileReader() {
             <label class="label">user_info.json from GFAlarm</label>
         </fieldset>
         <Show when={vehicleComponents()}>
+            <ComponentTable data={convertRawToVehicleComponent(vehicleComponents()!)} />
             <pre class="rounded-lg p-4 text-left">
                 <code>
                     {JSON.stringify(
