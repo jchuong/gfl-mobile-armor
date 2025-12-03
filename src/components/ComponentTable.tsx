@@ -22,13 +22,13 @@ const COLUMNS: ColumnDef<VehicleComponent>[] = [
   {
     accessorKey: "rarity",
     header: () => "Rarity",
-    cell: ({getValue}) => {
+    cell: ({ getValue }) => {
       const rarity = getValue() as number;
-      return '★'.repeat(rarity);
-    }
+      return "★".repeat(rarity);
+    },
   },
   {
-    accessorKey: 'type',
+    accessorKey: "type",
     header: () => "Type",
   },
   {
@@ -102,20 +102,26 @@ export default function ComponentTable(props: ComponentTableProps) {
         </thead>
         <tbody>
           <For each={table.getRowModel().rows}>
-            {(row) => (
-              <tr>
-                <For each={row.getVisibleCells()}>
-                  {(cell) => (
-                    <td>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
-                    </td>
-                  )}
-                </For>
-              </tr>
-            )}
+            {(row) => {
+              const { is_locked, duplicateCount} = row.original;
+              const duplicate =
+                !is_locked && duplicateCount > 2;
+              const trClass = is_locked ? 'bg-green-100' : duplicate ? 'bg-red-200' : '';
+              return (
+                <tr class={trClass}>
+                  <For each={row.getVisibleCells()}>
+                    {(cell) => (
+                      <td>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext(),
+                        )}
+                      </td>
+                    )}
+                  </For>
+                </tr>
+              );
+            }}
           </For>
         </tbody>
         <tfoot>
