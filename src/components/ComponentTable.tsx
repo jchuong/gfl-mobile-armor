@@ -48,11 +48,15 @@ const COLUMNS: ColumnDef<VehicleComponent>[] = [
     accessorKey: "roll_3",
     header: () => "Skill 3",
   },
+  {
+    accessorKey: "hash",
+  },
+
 ];
 
 export default function ComponentTable(props: ComponentTableProps) {
   const [sorting, setSorting] = createSignal<SortingState>([
-    { id: "name", desc: false },
+    { id: "hash", desc: false },
   ]);
   const table = createSolidTable({
     columns: COLUMNS,
@@ -66,6 +70,9 @@ export default function ComponentTable(props: ComponentTableProps) {
       get sorting() {
         return sorting();
       },
+      columnVisibility: {
+        hash: false,
+      }
     },
   });
   return (

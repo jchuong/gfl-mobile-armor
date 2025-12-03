@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <main>
       <Title>GFL MA Organizer</Title>
-      <h1>Hello world!</h1>
+      <h1>Organizer</h1>
       <UserFileReader />
     </main>
   );
