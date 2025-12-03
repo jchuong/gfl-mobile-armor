@@ -20,6 +20,14 @@ const COLUMNS: ColumnDef<VehicleComponent>[] = [
     sortingFn: "text",
   },
   {
+    accessorKey: "rarity",
+    header: () => "Rarity",
+    cell: ({getValue}) => {
+      const rarity = getValue() as number;
+      return '★'.repeat(rarity);
+    }
+  },
+  {
     accessorKey: "level",
     header: () => "Level",
     sortingFn: "basic",

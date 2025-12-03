@@ -1,9 +1,10 @@
 export type VehicleComponentWithUserInfo = Map<string, RawVehicleComponent>;
+export type Rarity = 3 | 4 | 5;
 
 export type RawVehicleComponent = {
   id: string;
   user_id: string;
-  component_id: string;
+component_id: string;
   exp: string;
   level: string;
   skin: string;
@@ -36,6 +37,7 @@ export type VehicleComponent = {
   id: number;
   component_id: number;
   name: string;
+  rarity: Rarity;
   level: number;
   skin: string;
   is_locked: boolean;

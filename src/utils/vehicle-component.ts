@@ -1,4 +1,5 @@
 import {
+  Rarity,
   RawVehicleComponent,
   VehicleComponent,
   VehicleComponentWithUserInfo,
@@ -8,11 +9,22 @@ import t from "~/data/en.json";
 interface Translation {
   [key: string]: string;
 }
+
 const translation = t as Translation;
 
 export function getNameOfComponent(componentId: number | string) {
   const key = `vehicle_component-1000${componentId}`;
   return translation[key] ?? key;
+}
+
+export function componentIdToRarity(componentId: number | string): Rarity {
+  const exp = Math.floor(Number(componentId) / 1000);
+  switch (exp) {
+    case 1: return 5;
+    case 2: return 4;
+    case 3: return 3;
+    default: return 5;
+  }
 }
 
 export function convertRawToVehicleComponent(
@@ -24,6 +36,7 @@ export function convertRawToVehicleComponent(
         id: Number(component.id),
         component_id: Number(component.component_id),
         name: getNameOfComponent(component.component_id),
+        rarity: componentIdToRarity(component.component_id),
         level: Number(component.level),
         skin: component.skin,
         is_locked: component.is_locked === "1",
@@ -47,7 +60,7 @@ export function convertRawToVehicleComponent(
         H_armor_piercing: Number(component.H_armor_piercing),
         def_break: Number(component.def_break),
         skill: component.skill,
-      } as VehicleComponent;
+      };
     },
   );
 }
