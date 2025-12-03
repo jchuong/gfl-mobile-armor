@@ -28,6 +28,10 @@ const COLUMNS: ColumnDef<VehicleComponent>[] = [
     }
   },
   {
+    accessorKey: 'type',
+    header: () => "Type",
+  },
+  {
     accessorKey: "level",
     header: () => "Level",
     sortingFn: "basic",

@@ -1,4 +1,5 @@
 import {
+  ComponentType,
   Rarity,
   RawVehicleComponent,
   VehicleComponent,
@@ -27,6 +28,27 @@ export function componentIdToRarity(componentId: number | string): Rarity {
   }
 }
 
+export function getComponentType(componentId: number | string): ComponentType {
+  const baseId = Number(componentId) % 1000;
+  if (baseId < 13) {
+    return 'Unversal Component';
+  }
+  const lightWeapons = [101, 102, 103, 104, 106, 107, 122, 126, 128, 130];
+  if (lightWeapons.includes(baseId)) {
+    return 'Light Weapon';
+  }
+  const heavyWeapons = [108, 109, 110, 111, 112, 113, 118, 119, 120, 131];
+  if (heavyWeapons.includes(baseId)) {
+    return 'Heavy Weapon';
+  }
+  const functionComponents = [105, 114, 115, 116, 117, 123, 125, 129, 132];
+  if (functionComponents.includes(baseId)) {
+    return 'Function Component';
+  }
+  // const defenseComponents = [121, 124, 126, 133, 134];
+  return 'Defense Component';
+}
+
 export function convertRawToVehicleComponent(
   input: VehicleComponentWithUserInfo,
 ) {
@@ -38,6 +60,7 @@ export function convertRawToVehicleComponent(
         name: getNameOfComponent(component.component_id),
         rarity: componentIdToRarity(component.component_id),
         level: Number(component.level),
+        type: getComponentType(component.component_id),
         skin: component.skin,
         is_locked: component.is_locked === "1",
         roll_1: component.roll_1,
