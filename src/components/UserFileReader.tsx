@@ -5,9 +5,7 @@ import ComponentTable from "./ComponentTable";
 import { createStore } from "solid-js/store";
 
 export default function UserFileReader() {
-  const [vehicleComponents, setVehicleComponents] = createStore<
-    VehicleComponent[]
-  >([]);
+  const [vehicleComponents, setVehicleComponents] = createStore<VehicleComponent[]>([]);
 
   const readFile = async (file: File | null) => {
     if (!file) {

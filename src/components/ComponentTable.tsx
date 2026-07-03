@@ -8,6 +8,7 @@ import {
 } from "@tanstack/solid-table";
 import { createSignal, For } from "solid-js";
 import { VehicleComponent } from "~/types/VehicleComponent";
+import { isIdealComponent } from "~/utils/vehicle-component";
 
 interface ComponentTableProps {
   data: VehicleComponent[];
@@ -51,13 +52,10 @@ const COLUMNS: ColumnDef<VehicleComponent>[] = [
   {
     accessorKey: "hash",
   },
-
 ];
 
 export default function ComponentTable(props: ComponentTableProps) {
-  const [sorting, setSorting] = createSignal<SortingState>([
-    { id: "hash", desc: false },
-  ]);
+  const [sorting, setSorting] = createSignal<SortingState>([{ id: "hash", desc: false }]);
   const table = createSolidTable({
     columns: COLUMNS,
     get data() {
@@ -72,7 +70,7 @@ export default function ComponentTable(props: ComponentTableProps) {
       },
       columnVisibility: {
         hash: false,
-      }
+      },
     },
   });
   return (
@@ -88,16 +86,11 @@ export default function ComponentTable(props: ComponentTableProps) {
                       {header.isPlaceholder ? null : (
                         <div
                           class={
-                            header.column.getCanSort()
-                              ? "cursor-pointer select-none"
-                              : undefined
+                            header.column.getCanSort() ? "cursor-pointer select-none" : undefined
                           }
                           onClick={header.column.getToggleSortingHandler()}
                         >
-                          {flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
+                          {flexRender(header.column.columnDef.header, header.getContext())}
                         </div>
                       )}
                     </th>
@@ -110,21 +103,20 @@ export default function ComponentTable(props: ComponentTableProps) {
         <tbody>
           <For each={table.getRowModel().rows}>
             {(row) => {
-              const { is_locked, duplicateCount} = row.original;
-              const duplicate =
-                !is_locked && duplicateCount > 2;
-              const trClass = is_locked ? 'bg-green-100' : duplicate ? 'bg-red-200' : '';
+              const { is_locked, duplicateCount } = row.original;
+              const duplicate = !is_locked && duplicateCount > 2;
+              const ideal = !is_locked && !duplicate && isIdealComponent(row.original);
+              const trClass = is_locked
+                ? "bg-green-100"
+                : duplicate
+                  ? "bg-red-200"
+                  : ideal
+                    ? "bg-yellow-200"
+                    : "";
               return (
                 <tr class={trClass}>
                   <For each={row.getVisibleCells()}>
-                    {(cell) => (
-                      <td>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext(),
-                        )}
-                      </td>
-                    )}
+                    {(cell) => <td>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>}
                   </For>
                 </tr>
               );
@@ -140,10 +132,7 @@ export default function ComponentTable(props: ComponentTableProps) {
                     <th>
                       {header.isPlaceholder
                         ? null
-                        : flexRender(
-                            header.column.columnDef.footer,
-                            header.getContext(),
-                          )}
+                        : flexRender(header.column.columnDef.footer, header.getContext())}
                     </th>
                   )}
                 </For>
