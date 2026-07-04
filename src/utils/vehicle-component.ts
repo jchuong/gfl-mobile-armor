@@ -82,6 +82,24 @@ export function isIdealComponent(component: VehicleComponent): boolean {
   return rolls.some((roll) => idealTalents.includes(roll));
 }
 
+// A component that rolled both Reload and Accuracy is low value: both are
+// called out in the loadout guide as effectively dead stats (Reload is only
+// useful on the Grenade Launcher; Accuracy is a strictly worse version of
+// Precision), so a component with both has at most one roll left that could
+// ever be useful.
+export function isLowValueComponent(component: VehicleComponent): boolean {
+  const rolls = [
+    component.roll_1,
+    component.roll_2,
+    component.roll_3,
+    component.roll_4,
+    component.roll_5,
+  ];
+  const hasReload = rolls.some((roll) => roll.startsWith("Reload Speed"));
+  const hasAccuracy = rolls.some((roll) => roll.startsWith("Accuracy"));
+  return hasReload && hasAccuracy;
+}
+
 function hashComponent(component: RawVehicleComponent): string {
   const keys = [
     getNameOfComponent(component.component_id),

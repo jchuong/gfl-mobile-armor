@@ -8,7 +8,7 @@ import {
 } from "@tanstack/solid-table";
 import { createSignal, For } from "solid-js";
 import { VehicleComponent } from "~/types/VehicleComponent";
-import { isIdealComponent } from "~/utils/vehicle-component";
+import { isIdealComponent, isLowValueComponent } from "~/utils/vehicle-component";
 
 interface ComponentTableProps {
   data: VehicleComponent[];
@@ -75,6 +75,24 @@ export default function ComponentTable(props: ComponentTableProps) {
   });
   return (
     <div class="m-2 rounded-box border border-base-content/5 bg-base-100">
+      <div class="flex flex-wrap gap-4 p-2 text-sm">
+        <div class="flex items-center gap-2">
+          <span class="h-4 w-4 rounded bg-green-100" />
+          Locked
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="h-4 w-4 rounded bg-yellow-200" />
+          Ideal talent rolled
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="h-4 w-4 rounded bg-red-700" />
+          Low value (Reload + Accuracy, safe to delete)
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="h-4 w-4 rounded bg-red-200" />
+          Duplicate (more than 2 copies)
+        </div>
+      </div>
       <table class="table table-pin-rows">
         <thead>
           <For each={table.getHeaderGroups()}>
@@ -104,15 +122,18 @@ export default function ComponentTable(props: ComponentTableProps) {
           <For each={table.getRowModel().rows}>
             {(row) => {
               const { is_locked, duplicateCount } = row.original;
-              const duplicate = !is_locked && duplicateCount > 2;
-              const ideal = !is_locked && !duplicate && isIdealComponent(row.original);
+              const ideal = !is_locked && isIdealComponent(row.original);
+              const lowValue = !is_locked && !ideal && isLowValueComponent(row.original);
+              const duplicate = !is_locked && !ideal && !lowValue && duplicateCount > 2;
               const trClass = is_locked
                 ? "bg-green-100"
-                : duplicate
-                  ? "bg-red-200"
-                  : ideal
-                    ? "bg-yellow-200"
-                    : "";
+                : ideal
+                  ? "bg-yellow-200"
+                  : lowValue
+                    ? "bg-red-700 text-white"
+                    : duplicate
+                      ? "bg-red-200"
+                      : "";
               return (
                 <tr class={trClass}>
                   <For each={row.getVisibleCells()}>
