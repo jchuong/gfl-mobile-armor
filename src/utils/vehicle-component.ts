@@ -7,6 +7,7 @@ import {
 } from "~/types/VehicleComponent";
 import t from "~/data/en.json";
 import { IDEAL_TALENTS_BY_COMPONENT } from "~/data/ideal-components";
+import { SKILL_ID_TO_TALENT, STAT_ROLL_LABELS } from "~/data/skill-talent-map";
 
 interface Translation {
   [key: string]: string;
@@ -46,12 +47,24 @@ export function getComponentType(componentId: number | string): ComponentType {
   if (heavyWeapons.includes(baseId)) {
     return "Heavy Weapon";
   }
-  const functionComponents = [105, 114, 115, 116, 117, 123, 125, 129, 132];
+  const functionComponents = [105, 114, 115, 116, 117, 123, 125, 127, 129, 132];
   if (functionComponents.includes(baseId)) {
     return "Function Component";
   }
   // const defenseComponents = [121, 124, 126, 133, 134];
   return "Defense Component";
+}
+
+export function translateRoll(raw: string): string {
+  if (!raw) {
+    return raw;
+  }
+  const [key, value] = raw.split(":");
+  if (key === "skill") {
+    return SKILL_ID_TO_TALENT[value] ?? raw;
+  }
+  const label = STAT_ROLL_LABELS[key];
+  return label ? `${label} +${value}` : raw;
 }
 
 export function isIdealComponent(component: VehicleComponent): boolean {
@@ -105,11 +118,11 @@ export function convertRawToVehicleComponent(input: VehicleComponentWithUserInfo
       duplicateCount: countUniqueComponents.get(hash) ?? 1,
       skin: component.skin,
       is_locked: component.is_locked === "1",
-      roll_1: component.roll_1,
-      roll_2: component.roll_2,
-      roll_3: component.roll_3,
-      roll_4: component.roll_4,
-      roll_5: component.roll_5,
+      roll_1: translateRoll(component.roll_1),
+      roll_2: translateRoll(component.roll_2),
+      roll_3: translateRoll(component.roll_3),
+      roll_4: translateRoll(component.roll_4),
+      roll_5: translateRoll(component.roll_5),
       unlocked_att: component.unlocked_att,
       heavy_damage: Number(component.heavy_damage),
       light_damage: Number(component.light_damage),
