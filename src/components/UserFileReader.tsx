@@ -2,6 +2,7 @@ import { Show } from "solid-js";
 import { VehicleComponent } from "~/types/VehicleComponent";
 import { convertRawToVehicleComponent } from "~/utils/vehicle-component";
 import ComponentTable from "./ComponentTable";
+import LoadoutSuggestion from "./LoadoutSuggestion";
 import { createStore } from "solid-js/store";
 
 export default function UserFileReader() {
@@ -38,6 +39,7 @@ export default function UserFileReader() {
         <label class="label">user_info.json from GFAlarm</label>
       </fieldset>
       <Show when={vehicleComponents.length > 0}>
+        <LoadoutSuggestion data={vehicleComponents} />
         <ComponentTable data={vehicleComponents} />
       </Show>
     </div>
