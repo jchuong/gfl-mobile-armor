@@ -1,8 +1,10 @@
 import {
   ColumnDef,
+  ColumnFiltersState,
   createSolidTable,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
   getSortedRowModel,
   SortingState,
 } from "@tanstack/solid-table";
@@ -20,6 +22,7 @@ const COLUMNS: ColumnDef<VehicleComponent>[] = [
     accessorKey: "name",
     header: () => "Name",
     sortingFn: "text",
+    filterFn: "equals",
   },
   {
     accessorKey: "rarity",
@@ -28,35 +31,71 @@ const COLUMNS: ColumnDef<VehicleComponent>[] = [
       const rarity = getValue() as number;
       return "★".repeat(rarity);
     },
+    filterFn: "equals",
   },
   {
     accessorKey: "type",
     header: () => "Type",
+    filterFn: "equals",
   },
   {
     accessorKey: "level",
     header: () => "Level",
     sortingFn: "basic",
+    filterFn: "equals",
   },
   {
     accessorKey: "roll_1",
     header: () => "Skill 1",
+    filterFn: "equals",
   },
   {
     accessorKey: "roll_2",
     header: () => "Skill 2",
+    filterFn: "equals",
   },
   {
     accessorKey: "roll_3",
     header: () => "Skill 3",
+    filterFn: "equals",
   },
   {
     accessorKey: "hash",
   },
 ];
 
+// Numeric columns need their filter value parsed back to a number, since
+// <select> values are always strings but the underlying cell value isn't.
+const NUMERIC_COLUMNS = new Set(["rarity", "level"]);
+
+function parseFilterValue(columnId: string, raw: string): string | number {
+  return NUMERIC_COLUMNS.has(columnId) ? Number(raw) : raw;
+}
+
+function formatFilterOption(columnId: string, value: unknown): string {
+  if (columnId === "rarity") {
+    return "★".repeat(Number(value));
+  }
+  return String(value);
+}
+
+function uniqueColumnValues(data: VehicleComponent[], columnId: string): unknown[] {
+  const seen = new Map<string, unknown>();
+  data.forEach((row) => {
+    const value = row[columnId as keyof VehicleComponent];
+    if (value === undefined || value === null || value === "") {
+      return;
+    }
+    seen.set(String(value), value);
+  });
+  return [...seen.values()].sort((a, b) =>
+    String(a).localeCompare(String(b), undefined, { numeric: true }),
+  );
+}
+
 export default function ComponentTable(props: ComponentTableProps) {
   const [sorting, setSorting] = createSignal<SortingState>([{ id: "hash", desc: false }]);
+  const [columnFilters, setColumnFilters] = createSignal<ColumnFiltersState>([]);
   const table = createSolidTable({
     columns: COLUMNS,
     get data() {
@@ -64,10 +103,15 @@ export default function ComponentTable(props: ComponentTableProps) {
     },
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
     onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
     state: {
       get sorting() {
         return sorting();
+      },
+      get columnFilters() {
+        return columnFilters();
       },
       columnVisibility: {
         hash: false,
@@ -119,6 +163,43 @@ export default function ComponentTable(props: ComponentTableProps) {
                         >
                           {flexRender(header.column.columnDef.header, header.getContext())}
                         </div>
+                      )}
+                    </th>
+                  )}
+                </For>
+              </tr>
+            )}
+          </For>
+          <For each={table.getHeaderGroups()}>
+            {(headerGroup) => (
+              <tr>
+                <For each={headerGroup.headers}>
+                  {(header) => (
+                    <th class="bg-base-200">
+                      {header.isPlaceholder ? null : (
+                        <select
+                          class="select select-xs w-full"
+                          value={
+                            (
+                              header.column.getFilterValue() as string | number | undefined
+                            )?.toString() ?? ""
+                          }
+                          onChange={(event) => {
+                            const raw = event.currentTarget.value;
+                            header.column.setFilterValue(
+                              raw === "" ? undefined : parseFilterValue(header.column.id, raw),
+                            );
+                          }}
+                        >
+                          <option value="">All</option>
+                          <For each={uniqueColumnValues(props.data, header.column.id)}>
+                            {(value) => (
+                              <option value={String(value)}>
+                                {formatFilterOption(header.column.id, value)}
+                              </option>
+                            )}
+                          </For>
+                        </select>
                       )}
                     </th>
                   )}
