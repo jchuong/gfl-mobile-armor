@@ -23,16 +23,16 @@
 // them here.
 export const SKILL_ID_TO_TALENT: Record<string, string> = {
   // Heavy Weapon-exclusive
-  "220167": "Anti-Armor Specialization",
-  "220173": "Heavy Weapon Shield",
+  "220167": "Elite Strike",
+  "220173": "Anti-Armor Specialization",
   "220175": "Anti-Mechanical Unit Specialization",
-  "220180": "Anti-Dummy-Linked Unit Specialization",
-  "220181": "Weak Point Targeting",
-  "220185": "Elite Attack",
-  "770045": "Heavy Weapon Support",
-  "770081": "Heavy Weapon Weakening",
-  "770091": "Heavy Weapon Detonation",
-  "770093": "Heavy Weapon Charge",
+  "220180": "Weak Point Targeting",
+  "220181": "Anti-Dummy-Linked Unit Specialization",
+  "220185": "Heavy Weapon Support",
+  "770045": "Heavy Weapon Detonation",
+  "770081": "Heavy Weapon Charge",
+  "770091": "Heavy Weapon Shield",
+  "770093": "Heavy Weapon Weakening",
   // Light Weapon-exclusive
   "220187": "Rapid Enhancement",
   "770036": "Anti-Unarmored Unit Specialization",
