@@ -55,6 +55,11 @@ export type VehicleComponent = {
   roll_3: string;
   roll_4: string;
   roll_5: string;
+  roll_1_raw: string;
+  roll_2_raw: string;
+  roll_3_raw: string;
+  roll_4_raw: string;
+  roll_5_raw: string;
   unlocked_att: string;
   heavy_damage: number;
   light_damage: number;

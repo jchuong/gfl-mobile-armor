@@ -9,6 +9,7 @@ import {
 import { createSignal, For } from "solid-js";
 import { VehicleComponent } from "~/types/VehicleComponent";
 import { isIdealComponent, isLowValueComponent } from "~/utils/vehicle-component";
+import { componentsToCsv, downloadCsv } from "~/utils/csv";
 
 interface ComponentTableProps {
   data: VehicleComponent[];
@@ -75,23 +76,31 @@ export default function ComponentTable(props: ComponentTableProps) {
   });
   return (
     <div class="m-2 rounded-box border border-base-content/5 bg-base-100">
-      <div class="flex flex-wrap gap-4 p-2 text-sm">
-        <div class="flex items-center gap-2">
-          <span class="h-4 w-4 rounded bg-green-100" />
-          Locked
+      <div class="flex flex-wrap items-center justify-between gap-4 p-2 text-sm">
+        <div class="flex flex-wrap gap-4">
+          <div class="flex items-center gap-2">
+            <span class="h-4 w-4 rounded bg-green-100" />
+            Locked
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="h-4 w-4 rounded bg-yellow-200" />
+            Ideal talent rolled
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="h-4 w-4 rounded bg-red-700" />
+            Low value (Reload + Accuracy, safe to delete)
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="h-4 w-4 rounded bg-red-200" />
+            Duplicate (more than 2 copies)
+          </div>
         </div>
-        <div class="flex items-center gap-2">
-          <span class="h-4 w-4 rounded bg-yellow-200" />
-          Ideal talent rolled
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="h-4 w-4 rounded bg-red-700" />
-          Low value (Reload + Accuracy, safe to delete)
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="h-4 w-4 rounded bg-red-200" />
-          Duplicate (more than 2 copies)
-        </div>
+        <button
+          class="btn btn-sm"
+          onClick={() => downloadCsv("vehicle_components.csv", componentsToCsv(props.data))}
+        >
+          Export CSV
+        </button>
       </div>
       <table class="table table-pin-rows">
         <thead>
